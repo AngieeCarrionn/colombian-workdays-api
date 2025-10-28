@@ -1,5 +1,15 @@
+import { TIMEZONE } from "../config/constants";
 import { BusinessDateParams } from "../domain/Interfaces/IBusinessDateService";
 import { DateTime } from "luxon";
+
+/**
+ * Utilidades de validación para la API de fechas hábiles.
+ *
+ * Contiene:
+ * - validateISODate: valida que la cadena tenga formato ISO 8601 con hora y zona (UTC)
+ * - validateBusinessDateParams: valida y normaliza los parámetros de consulta usados por
+ *   el endpoint `/api/business-date`.
+ */
 
 /**
  * Valida que una cadena esté en formato ISO 8601 con hora y zona (UTC)
@@ -39,21 +49,30 @@ export const validateISODate = (date?: string): void => {
 export const validateBusinessDateParams = (query: Record<string, any>): BusinessDateParams => {
     const days = query.days !== undefined ? Number(query.days) : undefined;
     const hours = query.hours !== undefined ? Number(query.hours) : undefined;
-    const date = query.date ? String(query.date) : undefined;
-
-    // Validar que al menos uno esté definido
+    // Validar que al menos uno esté definido y sea numérico
     if ((days === undefined || isNaN(days)) && (hours === undefined || isNaN(hours))) {
         throw { status: 400, error: "InvalidParameters", message: "Debe enviar days o hours" };
     }
 
-    // Validar valores positivos
+    // Validar valores positivos (si se proporcionan)
     if (days !== undefined && days <= 0) {
         throw { status: 400, error: "InvalidParameters", message: "days debe ser positivo" };
     }
     if (hours !== undefined && hours <= 0) {
         throw { status: 400, error: "InvalidParameters", message: "hours debe ser positivo" };
     }
-    // Validar formato de fecha ISO
-    validateISODate(date);
+
+    // Determinar la fecha: si viene en la query se valida su formato ISO. Si no, se devuelve
+    // la fecha actual en la zona horaria de Colombia convertida a UTC en formato ISO.
+    let date: string;
+    if (query.date) {
+        date = String(query.date);
+        // Validar formato de fecha ISO si viene
+        validateISODate(date);
+    } else {
+        // Si no viene, tomar fecha actual en Colombia y convertir a ISO UTC sin milisegundos
+        date = DateTime.now().setZone(TIMEZONE).toUTC().toISO({ suppressMilliseconds: true })!;
+    }
+
     return { days, hours, date };
 };
