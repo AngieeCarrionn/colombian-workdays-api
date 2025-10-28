@@ -1,7 +1,7 @@
 import { TIMEZONE } from "../config/constants";
 import { BusinessDateParams } from "../domain/Interfaces/IBusinessDateService";
 import { DateTime } from "luxon";
-
+import { BusinessDateRequestDTO } from "../types/businessDate.types";
 /**
  * Utilidades de validación para la API de fechas hábiles.
  *
@@ -39,14 +39,14 @@ export const validateISODate = (date?: string): void => {
 /**
  * Valida y convierte los parámetros de consulta para el cálculo de fechas hábiles
  * 
- * @param {any} query - Objeto con los parámetros de la consulta
- * @param {string} [query.days] - Días hábiles a añadir
- * @param {string} [query.hours] - Horas hábiles a añadir
- * @param {string} [query.date] - Fecha inicial en formato ISO
- * @returns {BusinessDateParams} Parámetros validados y convertidos
- * @throws {Error} Si los parámetros son inválidos
+ * @param {Partial<BusinessDateRequestDTO>} query - Objeto con los parámetros de la consulta
+ * @param {number} [query.days] - Días hábiles a añadir (debe ser positivo)
+ * @param {number} [query.hours] - Horas hábiles a añadir (debe ser positivo)
+ * @param {string} [query.date] - Fecha inicial en formato ISO UTC (ej: 2025-10-28T00:00:00Z)
+ * @returns {BusinessDateParams} Parámetros validados y convertidos con fecha en UTC
+ * @throws {Error} Si los parámetros son inválidos o no se proporciona ni days ni hours
  */
-export const validateBusinessDateParams = (query: Record<string, any>): BusinessDateParams => {
+export const validateBusinessDateParams = (query: Partial<BusinessDateRequestDTO>): BusinessDateParams => {
     const days = query.days !== undefined ? Number(query.days) : undefined;
     const hours = query.hours !== undefined ? Number(query.hours) : undefined;
     // Validar que al menos uno esté definido y sea numérico
