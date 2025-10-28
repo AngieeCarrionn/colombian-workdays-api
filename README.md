@@ -55,7 +55,7 @@ GET /api/business-date?date=2023-10-28T14:00:00Z&days=2&hours=4
 
 ```bash
 # Clonar el repositorio
-git clone <url-del-repositorio>
+git clone https://github.com/AngieeCarrionn/colombian-workdays-api.git
 cd colombian-workdays-api
 
 # Instalar dependencias
