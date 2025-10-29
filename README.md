@@ -83,19 +83,15 @@ npm run test:watch
 
 ```
 src/
-├── app.ts              # Configuración de Express
-├── index.ts           # Punto de entrada
-├── config/           # Configuraciones
-├── controllers/      # Controladores
-├── domain/          # Lógica de negocio
-│   ├── entities/    # Entidades
-│   ├── interfaces/  # Interfaces
-│   └── services/    # Servicios
-├── infrastructure/  # Implementaciones
-├── routes/         # Rutas de la API
-├── test/          # Tests
-├── types/         # Tipos y definiciones
-└── utils/         # Utilidades
+├── config/          → configuración y constantes globales
+├── controllers/     → lógica HTTP (manejo de requests/responses)
+├── domain/          → lógica de negocio (entidades, interfaces, servicios de dominio)
+├── infrastructure/  → integración externa (repositorios, servicios externos)
+├── routes/          → endpoints Express
+├── test/            → pruebas unitarias
+├── types/           → tipados compartidos y errores
+├── utils/           → funciones utilitarias (helpers de fechas, validadores)
+
 ```
 ## 🤝 Contribución
 
