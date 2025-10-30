@@ -1,43 +1,50 @@
 /**
- * @ Conjunto de pruebas para la clase BusinessDateService.
- * Estas pruebas verifican la lógica de cálculo de fechas hábiles, incluyendo:
+ * Pruebas unitarias para la clase BusinessDateService.
+ *
+ * Estas pruebas verifican:
  * - Validación de parámetros
- * - Cálculos de días hábiles
- * - Manejo de días festivos
+ * - Cálculos de días hábiles y horas hábiles
+ * - Manejo de días festivos y fines de semana
  * - Casos límite para diferentes zonas horarias
- * 
+ *
+ * @group Unit
+ * @group BusinessDate
  */
 
 import { describe, it, expect } from "vitest";
 import { BusinessDateService } from "../domain/services/businessDate.service";
 
-/**
- * Conjunto de pruebas para BusinessDateService
- * Verifica la funcionalidad principal de los cálculos de fechas hábiles
- */
 describe("BusinessDateService", () => {
-  /**
-   * Caso de prueba: Validación de parámetros
-   * Verifica que el servicio valida correctamente los parámetros de entrada.
-   * y lanza un error cuando faltan parámetros requeridos
-   */
-  it("debería lanzar si no se proporcionan parámetros", async () => {
+  it("lanza error si no se proporcionan parámetros", async () => {
     const service = new BusinessDateService();
     await expect(service.calculateBusinessDate({})).rejects.toThrow();
   });
 
-  // TODO: Añadir prueba para calcular el siguiente día laborable.
-  // debería verificar que se omiten los fines de semana
+  it("suma 1 hora hábil correctamente", async () => {
+    const service = new BusinessDateService();
+    const result = await service.calculateBusinessDate({
+      hours: 1,
+      date: "2025-10-31T22:00:00.000Z",
+    });
+    expect(result).toBe("2025-11-04T14:00:00Z");
+  });
 
-  // TODO: Añadir prueba para calcular el día laborable anterior
-  // debería verificar que se omiten los fines de semana
+  it("suma 1 día hábil + 4 horas correctamente", async () => {
+    const service = new BusinessDateService();
+    const result = await service.calculateBusinessDate({
+      days: 1,
+      hours: 4,
+      date: "2025-10-28T20:00:00.000Z",
+    });
+    expect(result).toBe("2025-10-30T15:00:00Z");
+  });
 
-  // TODO: Añadir prueba para el manejo de días festivos
-  // debería verificar que se omiten los días festivos en los cálculos
-
-  // TODO: Añadir prueba para casos límite de zonas horarias
-  // debería verificar el manejo correcto de las transiciones de días en diferentes zonas horarias
-
-  // TODO: Añadir prueba para cálculos de múltiples días
-  // debería verificar el conteo correcto de días hábiles al sumar/restar múltiples días
+  it("suma 8 horas hábiles correctamente", async () => {
+    const service = new BusinessDateService();
+    const result = await service.calculateBusinessDate({
+      hours: 8,
+      date: "2025-10-28T13:00:00.000Z",
+    });
+    expect(result).toBe("2025-10-28T22:00:00Z");
+  });
 });

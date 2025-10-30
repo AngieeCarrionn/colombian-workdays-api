@@ -25,13 +25,15 @@ let holidaysCache: Set<string> | null = null;
  * @throws {Error} Si no fue posible cargar los festivos desde `HOLIDAYS_URL`
  */
 export const getHolidays = async (): Promise<Set<string>> => {
+    // Si ya hay una caché cargada, se retorna directamente
     if (holidaysCache) return holidaysCache;
-
+    // Solicitar los festivos al endpoint configurado
     const response = await fetch(HOLIDAYS_URL);
     if (!response.ok) throw new Error("No se pudieron cargar los festivos");
-
+    // Transformar la respuesta en un conjunto de fechas normalizadas
     const data = await response.json();
     const normalized = data.map((d: any) => (typeof d === "string" ? d : d.date));
+    // Guardar en caché para futuras llamadas
     holidaysCache = new Set(normalized);
     return holidaysCache;
 };

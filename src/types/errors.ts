@@ -41,10 +41,19 @@ interface ApiError {
  * // Status: 400
  * // Body: { "error": "InvalidParameters", "message": "Formato de fecha no válido" }
  */
-export const errorHandler = (err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || 500;
-    const error = err.error || "InternalError";
-    const message = err.message || "Error interno del servidor";
+export const errorHandler = (
+  err: ApiError,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  const status = err.status || 500;
+  const error = err.error || "InternalError";
+  const message = err.message || "Error interno del servidor";
 
-    res.status(status).json({ error, message });
+  res.status(status).json({
+    status,
+    error,
+    message,
+  });
 };

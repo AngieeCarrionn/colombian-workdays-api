@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Servicio para verificar si una fecha específica es festivo nacional.
+ * Usa la caché proporcionada por el repositorio de festivos (`getHolidays()`).
+ */
 import { getHolidays } from "../repositories/holidays.repository";
 
 /**
@@ -18,6 +22,8 @@ import { getHolidays } from "../repositories/holidays.repository";
  * @throws {Error} Si no fue posible cargar la lista de festivos desde el repositorio
  */
 export const isHoliday = async (dateStr: string): Promise<boolean> => {
-  const holidays = await getHolidays();
-  return holidays.has(dateStr);
+    // Obtener el conjunto de fechas festivas desde la caché o el repositorio
+    const holidays = await getHolidays();
+    // Verificar si la fecha consultada está marcada como festiva
+    return holidays.has(dateStr);
 };

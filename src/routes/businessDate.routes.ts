@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Define las rutas relacionadas con el cálculo de fechas hábiles.
+ * Base path: /api/business-date
+ * 
+ * Incluye la documentación OpenAPI para el endpoint principal.
+ */
 import { Router } from "express";
 import { getBusinessDate } from "../controllers/businessDate.controller";
 
@@ -17,7 +23,7 @@ const router = Router();
  * @openapi
  * /api/business-date:
  *   get:
- *     summary: Calcula una nueva fecha hábil
+ *     summary: Calcula una nueva fecha hábil.
  *     tags: [Business Date]
  *     description: |
  *       Calcula una nueva fecha sumando días y/o horas hábiles a una fecha base,
@@ -25,7 +31,7 @@ const router = Router();
  *       - Horario laboral (8:00 AM - 5:00 PM)
  *       - Hora de almuerzo (12:00 PM - 1:00 PM)
  *       - Fines de semana
- *       - Zona horaria Colombia (America/Bogota)
+ *       - Zona horaria: Colombia (America/Bogota)
  *     parameters:
  *       - in: query
  *         name: date
@@ -55,7 +61,7 @@ const router = Router();
  *           Acepta decimales (ej: 1.5 = 1h 30min).
  *     responses:
  *       200:
- *         description: Nueva fecha calculada
+ *         description: Nueva fecha calculada.
  *         content:
  *           application/json:
  *             schema:
@@ -64,11 +70,11 @@ const router = Router();
  *                 date:
  *                   type: string
  *                   format: date-time
- *                   description: Nueva fecha en formato ISO 8601 UTC
+ *                   description: Nueva fecha en formato ISO 8601 UTC.
  *               example:
  *                 date: "2025-10-28T22:00:00Z"
  *       400:
- *         description: Error en los parámetros
+ *         description: Error en los parámetros.
  *         content:
  *           application/json:
  *             schema:
@@ -84,7 +90,7 @@ const router = Router();
  *                   type: string
  *                   example: "Debe enviar days o hours"
  *       500:
- *         description: Error interno del servidor
+ *         description: Error interno del servidor.
  *         content:
  *           application/json:
  *             schema:
