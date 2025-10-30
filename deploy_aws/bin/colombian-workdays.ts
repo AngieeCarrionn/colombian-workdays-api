@@ -31,9 +31,11 @@ const app = new cdk.App();
  * - La región puede modificarse según la cuenta AWS
  * - Si no esta definido`env`, CDK intentará usar la configuración por defecto del perfil AWS
  */
-new ColombianWorkdaysStack(app, "ColombianWorkdaysStack", {
+new ColombianWorkdaysStack(app, 'ColombianWorkdaysStack', {
     env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION || "us-east-1",
+        region: process.env.CDK_DEFAULT_REGION,
     },
 });
+
+app.synth();
