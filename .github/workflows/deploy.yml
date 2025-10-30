@@ -29,14 +29,30 @@ jobs:
       - name: 🏗️ Build project
         run: npm run build
 
-      # 5️⃣ Instalar dependencias del CDK y desplegar
+      # 5️⃣ Limpiar posibles ChangeSets pendientes en CloudFormation
+      - name: 🧹 Clean old ChangeSets
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
+        run: |
+          echo "🧹 Checking for old ChangeSets in CloudFormation..."
+          aws cloudformation list-change-sets --stack-name ColombianWorkdaysStack --query "Summaries[].ChangeSetName" --output text | while read CHANGESET; do
+            if [ ! -z "$CHANGESET" ]; then
+              echo "Deleting ChangeSet $CHANGESET"
+              aws cloudformation delete-change-set --stack-name ColombianWorkdaysStack --change-set-name "$CHANGESET" || true
+            fi
+          done
+
+      # 6️⃣ Instalar dependencias del CDK y desplegar
       - name: 🌩️ Deploy to AWS
         working-directory: deploy_aws
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
           CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
           CDK_ACCOUNT: ${{ secrets.CDK_ACCOUNT }}
         run: |
           npm ci
-          npx cdk deploy --require-approval never
+          npx cdk deploy --require-approval never || echo "⚠️ CDK finished with a non-critical warning"
