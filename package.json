@@ -11,9 +11,13 @@
         "lint": "eslint . --ext .ts"
     },
     "dependencies": {
+        "aws-cdk-lib": "^2.221.1",
+        "aws-sdk": "^2.1692.0",
+        "constructs": "^10.4.2",
         "cors": "^2.8.5",
         "express": "^5.1.0",
-        "luxon": "^3.7.2"
+        "luxon": "^3.7.2",
+        "serverless-http": "^4.0.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.19",
