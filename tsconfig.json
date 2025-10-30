@@ -10,5 +10,13 @@
         "strict": true,
         "skipLibCheck": true
     },
-  "include": ["src/**/*"]
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "dist",
+        "node_modules",
+        "deploy_aws",
+        "src/test"
+    ]
 }
