@@ -1,19 +1,16 @@
+
 /**
- * @fileoverview Application entry point for the Colombian Workdays API
+ * @fileoverview Punto de entrada de la aplicación para la API de Workdays Colombia
  * 
- * This is the main entry point for the application. It imports and starts
- * the Express server configured in the app module. The server handles:
- * - Business date calculations
- * - Colombian holiday validations
- * - Timezone-aware operations
- * 
- * Environment variables:
- * - PORT: Server port (defaults to 3000)
- * 
- * @see {@link startServer}
+ * Supports both:
+ * - Ejecución local (via Express server)
+ * - Despliegue en AWS Lambda (via serverless-http)
  */
-
-import { startServer } from "./app";
-
-// Initialize and start the Express server
-startServer();
+import { app, startServer } from "./app";
+import serverless from "serverless-http";
+// Controlador de exportación para AWS Lambda
+export const handler = serverless(app);
+// Si se ejecuta localmente (no en AWS Lambda), inicie Express normalmente.
+if (process.env.AWS_EXECUTION_ENV === undefined) {
+    startServer();
+}

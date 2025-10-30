@@ -91,7 +91,18 @@ src/
 ├── test/            → pruebas unitarias
 ├── types/           → tipados compartidos y errores
 ├── utils/           → funciones utilitarias (helpers de fechas, validadores)
-
+├── dist/ # Código compilado de TypeScript listo para despliegue
+│
+├── deploy_aws/      → Infraestructura como código (IaC) con AWS CDK
+│ ├── bin/           → Punto de entrada del CDK (colombian-workdays.ts)
+│ ├── lib/           → Definición del Stack principal (Lambda + API Gateway)
+│ └── tsconfig.json  → Configuración TS para CDK
+│
+├── node_modules/    → Dependencias instaladas (ignoradas en Git)
+├── .gitignore       → Exclusiones de control de versiones
+├── package.json     → Dependencias y scripts del proyecto
+├── tsconfig.json    → Configuración de compilación TypeScript (código fuente)
+└── README.md        → Documentación del proyecto
 ```
 ## 🤝 Contribución
 

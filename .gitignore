@@ -1,6 +1,39 @@
+# ========================
+# 📦 Dependencias
+# ========================
 node_modules/
+
+# ========================
+# 🧱 Compilación de TypeScript
+# ========================
 dist/
-.env
+
+# ========================
+# 🧪 Cobertura de tests
+# ========================
 coverage/
+
+# ========================
+# 🧰 Configuración del editor
+# ========================
 .vscode/
+.idea/
+
+# ========================
+# 💻 Archivos temporales del sistema
+# ========================
 .DS_Store
+Thumbs.db
+
+# ========================
+# ⚙️ Archivos temporales o generados accidentalmente
+# ========================
+src/in/
+
+# ========================
+# ☁️ AWS CDK
+# ========================
+cdk.out/
+deploy_aws/cdk.out/
+deploy_aws/node_modules/
+
