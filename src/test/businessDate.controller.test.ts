@@ -83,5 +83,51 @@ describe("BusinessDateController", () => {
                 date: "2025-10-28T22:00:00Z",
             });
         });
+
+        it("debe devolver 400 si se envían decimales o formatos raros en hours o days", async () => {
+            const casos = [
+                "/api/business-date?hours=1.5",
+                "/api/business-date?hours=2.0",
+                "/api/business-date?hours=3e1",
+                "/api/business-date?hours=+3",
+                "/api/business-date?days=1.2",
+            ];
+
+            for (const url of casos) {
+                const res = await request(app).get(url);
+                expect(res.status).toBe(400);
+                expect(res.body).toMatchObject({
+                    error: "InvalidParameters",
+                    message: expect.any(String),
+                });
+            }
+        });
+        it("debe devolver 400 si se envían 0 o valores negativos en hours o days", async () => {
+            const casos = [
+                "/api/business-date?hours=0",
+                "/api/business-date?days=0",
+                "/api/business-date?hours=-1",
+                "/api/business-date?days=-2",
+            ];
+
+            for (const url of casos) {
+                const res = await request(app).get(url);
+                expect(res.status).toBe(400);
+                expect(res.body).toMatchObject({
+                    error: "InvalidParameters",
+                    message: expect.any(String),
+                });
+            }
+        });
+        it("debe devolver 400 si se combinan parámetros inválidos (ej. days decimal y fecha inválida)", async () => {
+            const res = await request(app).get(
+                "/api/business-date?days=1.5&date=fecha-invalida"
+            );
+            expect(res.status).toBe(400);
+            expect(res.body).toMatchObject({
+                error: "InvalidParameters",
+                message: expect.any(String),
+            });
+        });
     });
 });

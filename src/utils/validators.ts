@@ -35,7 +35,45 @@ export const validateISODate = (date?: string): void => {
         };
     }
 };
+/**
+ * Convierte/valida estrictamente un entero positivo.
+ * Acepta:
+ *   - string con SOLO dígitos (p. ej., "3", "0003")
+ *   - number entero > 0
+ */
+const parseStrictPositiveInt = (
+    raw: unknown,
+    key: "days" | "hours"
+): number | undefined => {
+    // Si no vino el parámetro, no forzar error aquí
+    if (raw === undefined || raw === null) return undefined;
 
+    // Explícitamente NO aceptamos arrays u otros tipos que no sean string/number
+    if (Array.isArray(raw)) {
+        throw { status: 400, error: "InvalidParameters", message: `${key} debe ser un entero positivo` };
+    }
+    if (typeof raw === "number") {
+        if (!Number.isInteger(raw) || raw <= 0 || !Number.isSafeInteger(raw)) {
+            throw { status: 400, error: "InvalidParameters", message: `${key} debe ser un entero positivo` };
+        }
+        return raw;
+    }
+
+    if (typeof raw === "string") {
+        // Ultra-estricto: SIN trim. Debe ser dígitos puros (nada de espacios, +, decimales, exponentes).
+        if (!/^[0-9]+$/.test(raw)) {
+            throw { status: 400, error: "InvalidParameters", message: `${key} debe ser un entero positivo` };
+        }
+        const n = Number(raw); // seguro porque solo hay dígitos
+        if (!Number.isSafeInteger(n) || n <= 0) {
+            throw { status: 400, error: "InvalidParameters", message: `${key} debe ser un entero positivo` };
+        }
+        return n;
+    }
+
+    // Cualquier otro tipo queda rechazado
+    throw { status: 400, error: "InvalidParameters", message: `${key} debe ser un entero positivo` };
+};
 /**
  * Valida y convierte los parámetros de consulta para el cálculo de fechas hábiles
  * 
@@ -47,8 +85,9 @@ export const validateISODate = (date?: string): void => {
  * @throws {Error} Si los parámetros son inválidos o no se proporciona ni days ni hours
  */
 export const validateBusinessDateParams = (query: Partial<BusinessDateRequestDTO>): BusinessDateParams => {
-    const days = query.days !== undefined ? Number(query.days) : undefined;
-    const hours = query.hours !== undefined ? Number(query.hours) : undefined;
+    // Valida/convierte estrictamente
+    const days = parseStrictPositiveInt(query.days as unknown, "days");
+    const hours = parseStrictPositiveInt(query.hours as unknown, "hours");
     // Validar que al menos uno esté definido y sea numérico
     if ((days === undefined || isNaN(days)) && (hours === undefined || isNaN(hours))) {
         throw { status: 400, error: "InvalidParameters", message: "Debe enviar days o hours" };
