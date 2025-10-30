@@ -35,11 +35,12 @@ export class BusinessDateService implements IBusinessDateService {
         // Calcular la nueva fecha sumando o restando días/horas hábiles
         const result = await addBusinessTime(businessDate.getDate(), { days, hours });
         // Convertir el resultado a formato ISO UTC sin milisegundos
-        const iso = result.setZone("utc").toISO({ suppressMilliseconds: true });
-        // Validar que la conversión haya sido exitosa
-        if (!iso) {
-            throw { status: 500, error: "InternalError", message: "No se puede formatear la fecha." };
+        // Convierte a UTC ISO sin milisegundos
+        const isoString = result.toUTC().toISO({ suppressMilliseconds: true });
+
+        if (!isoString) {
+            throw { status: 500, error: "InternalError", message: "No se pudo formatear la fecha." };
         }
-        return iso;
+        return isoString; //Retorna string exacto "YYYY-MM-DDTHH:mm:ssZ"
     }
 }

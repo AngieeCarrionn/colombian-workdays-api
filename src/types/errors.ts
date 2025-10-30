@@ -52,7 +52,6 @@ export const errorHandler = (
   const message = err.message || "Error interno del servidor";
 
   res.status(status).json({
-    status,
     error,
     message,
   });
