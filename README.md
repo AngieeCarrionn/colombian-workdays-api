@@ -82,27 +82,33 @@ npm run test:watch
 ## 🏗️ Estructura del Proyecto
 
 ```
-src/
-├── config/          → configuración y constantes globales
-├── controllers/     → lógica HTTP (manejo de requests/responses)
-├── domain/          → lógica de negocio (entidades, interfaces, servicios de dominio)
-├── infrastructure/  → integración externa (repositorios, servicios externos)
-├── routes/          → endpoints Express
-├── test/            → pruebas unitarias
-├── types/           → tipados compartidos y errores
-├── utils/           → funciones utilitarias (helpers de fechas, validadores)
-├── dist/ # Código compilado de TypeScript listo para despliegue
+colombian-workdays-api/
+├── src/                      → Código fuente principal
+│   ├── config/               → Configuración global y constantes (festivos, zona horaria, etc.)
+│   ├── controllers/          → Controladores HTTP (manejo de requests/responses)
+│   ├── domain/               → Lógica de negocio (entidades, interfaces, servicios de dominio)
+│   ├── infrastructure/       → Integraciones externas y adaptadores (servicios, repositorios, etc.)
+│   ├── routes/               → Definición de endpoints Express
+│   ├── types/                → Tipos y definiciones compartidas
+│   ├── utils/                → Funciones auxiliares (validaciones, helpers de fechas, etc.)
+│   ├── test/                 → Pruebas unitarias y de integración
+│   ├── app.ts                → Configuración de Express y middlewares
+│   └── index.ts              → Punto de entrada principal / handler Lambda
 │
-├── deploy_aws/      → Infraestructura como código (IaC) con AWS CDK
-│ ├── bin/           → Punto de entrada del CDK (colombian-workdays.ts)
-│ ├── lib/           → Definición del Stack principal (Lambda + API Gateway)
-│ └── tsconfig.json  → Configuración TS para CDK
+├── dist/                     → Código compilado (JavaScript listo para despliegue)
 │
-├── node_modules/    → Dependencias instaladas (ignoradas en Git)
-├── .gitignore       → Exclusiones de control de versiones
-├── package.json     → Dependencias y scripts del proyecto
-├── tsconfig.json    → Configuración de compilación TypeScript (código fuente)
-└── README.md        → Documentación del proyecto
+├── deploy_aws/               → Infraestructura como código (IaC) con AWS CDK
+│   ├── bin/                  → Punto de entrada del CDK (`colombian-workdays.ts`)
+│   ├── lib/                  → Definición del stack principal (Lambda + API Gateway)
+│   └── tsconfig.json         → Configuración TypeScript para el entorno CDK
+│
+├── node_modules/             → Dependencias instaladas (excluidas del control de versiones)
+│
+├── .gitignore                → Archivos y carpetas excluidos de Git
+├── package.json              → Dependencias, scripts y metadatos del proyecto
+├── tsconfig.json             → Configuración del compilador TypeScript (fuente principal)
+└── README.md                 → Documentación del proyecto
+
 ```
 ## 🤝 Contribución
 

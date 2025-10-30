@@ -10,12 +10,12 @@
  * CDK traduce este código TypeScript en una plantilla de CloudFormation,
  * que AWS usa para crear y administrar los recursos automáticamente.
  */
-
+import * as path from "path";
 import * as cdk from "aws-cdk-lib"; // Biblioteca base de AWS CDK
 import * as lambda from "aws-cdk-lib/aws-lambda"; // Módulo para definir funciones Lambda
 import * as apigateway from "aws-cdk-lib/aws-apigateway"; // Módulo para crear una API Gateway
 import { Construct } from "constructs"; // Clase base para todos los recursos CDK
-
+import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 /**
  * Clase que representa el stack completo de infraestructura.
  * 
@@ -43,14 +43,17 @@ export class ColombianWorkdaysStack extends cdk.Stack {
             * - Tiene 512 MB de memoria y un tiempo máximo de ejecución de 10 segundos.
             * - Se define la variable de entorno `NODE_ENV=production`.
             */
-        const apiLambda = new lambda.Function(this, "ColombianWorkdaysFunction", {
-            runtime: lambda.Runtime.NODEJS_20_X, // Entorno de ejecución
-            handler: "index.handler",  // Punto de entrada (dist/index.js → export const handler)
-            code: lambda.Code.fromAsset("../dist"), // Carpeta con el código compilado de TypeScript
-            memorySize: 512,// Memoria asignada (en MB)
-            timeout: cdk.Duration.seconds(10),// Tiempo máximo de ejecución
-            environment: {// Variables de entorno accesibles desde la Lambda
+        const apiLambda = new NodejsFunction(this, "ColombianWorkdaysFunction", {
+            runtime: lambda.Runtime.NODEJS_20_X,          // Node.js 20
+            entry: path.join(__dirname, "../../dist/index.js"), // JS compilado
+            handler: "handler",                            // export handler
+            memorySize: 512,
+            timeout: cdk.Duration.seconds(10),
+            environment: {
                 NODE_ENV: "production",
+            },
+            bundling: {
+                externalModules: [], // Incluye todas las dependencias
             },
         });
 
