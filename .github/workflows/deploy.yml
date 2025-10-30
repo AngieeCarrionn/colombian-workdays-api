@@ -1,0 +1,41 @@
+name: 🚀 Deploy Colombian Workdays API
+
+on:
+  push:
+    branches:
+      - master # o la rama que quieras automatizar
+  workflow_dispatch: # permite ejecutarlo manualmente desde GitHub Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Clonar el repositorio
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v4
+
+      # 2️⃣ Configurar Node.js
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3️⃣ Instalar dependencias
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      # 4️⃣ Compilar el código
+      - name: 🏗️ Build project
+        run: npm run build
+
+      # 5️⃣ Instalar dependencias del CDK y desplegar
+      - name: 🌩️ Deploy to AWS
+        working-directory: deploy_aws
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          npm ci
+          npx cdk deploy --require-approval never
