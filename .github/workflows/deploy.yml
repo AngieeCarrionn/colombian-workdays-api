@@ -3,8 +3,8 @@ name: 🚀 Deploy Colombian Workdays API
 on:
   push:
     branches:
-      - master # o la rama que quieras automatizar
-  workflow_dispatch: # permite ejecutarlo manualmente desde GitHub Actions
+      - master # Rama para automatizar el despliegue
+  workflow_dispatch: # Permite ejecutarlo manualmente desde GitHub Actions
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      # 4️⃣ Compilar el código
+      # 4️⃣ Compilar el proyecto
       - name: 🏗️ Build project
         run: npm run build
 
@@ -35,8 +35,8 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
-          AWS_ACCOUNT_ID: ${{ secrets.CDK_ACCOUNT }}
+          CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
+          CDK_ACCOUNT: ${{ secrets.CDK_ACCOUNT }}
         run: |
           npm ci
           npx cdk deploy --require-approval never
